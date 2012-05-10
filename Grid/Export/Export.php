@@ -120,7 +120,7 @@ class Export
      */
     public function getMimeType()
     {
-        return $contentType;
+        return $this->mimeType;
     }
 
     /**
