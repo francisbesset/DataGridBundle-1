@@ -444,7 +444,7 @@ class Grid
 
                 $headers = [
                     'Content-Description' => 'File Transfer',
-                    'Content-Type' => 'application/octet-stream',
+                    'Content-Type' => $export->getMimeType(),
                     'Content-Disposition' => sprintf('attachment; filename="%s"', $export->getBaseName()),
                     'Content-Transfer-Encoding' => 'binary',
                     'Expires' => '0',
