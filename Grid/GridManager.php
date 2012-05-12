@@ -24,6 +24,8 @@ class GridManager implements \IteratorAggregate, \Countable
 
     private $routeUrl = null;
 
+    private $exportGrid = null;
+
     public function __construct($container)
     {
         $this->container = $container;
@@ -85,6 +87,39 @@ class GridManager implements \IteratorAggregate, \Countable
         return false;
     }
 
+    public function isReadyForExport()
+    {
+        if ($this->grids->count()==0) {
+            throw new \RuntimeException('No grid has been added to the manager.');
+        }
+
+        $checkHash = array();
+
+        $this->grids->rewind();
+        while($this->grids->valid()) {
+            /* @var $grid Sorien\DataGridBundle\Grid\Grid */
+            $grid = $this->grids->current();
+
+            if (in_array($grid->getHash(), $checkHash))
+            {
+                throw new \RuntimeException('Some grids seem similar. Please set an Indentifier for your grids.');
+            }
+            else {
+                $checkHash[] = $grid->getHash();
+            }
+
+            if ($grid->isReadyForExport()){
+                $this->exportGrid = $grid;
+
+                return true;
+            }
+
+            $this->grids->next();
+        }
+
+        return false;
+    }
+
     /**
      * Renders a view.
      *
@@ -98,6 +133,10 @@ class GridManager implements \IteratorAggregate, \Countable
     {
         if ($this->isReadyForRedirect())
         {
+            if ($this->isReadyForExport()) {
+                return $this->exportGrid->getExportResponse();
+            }
+
             return new RedirectResponse($this->getRouteUrl());
         }
         else

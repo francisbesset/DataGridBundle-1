@@ -1246,6 +1246,10 @@ class Grid
     {
         if ($this->isReadyForRedirect())
         {
+            if ($this->isReadyForExport()) {
+                return $this->getExportResponse();
+            }
+
             return new RedirectResponse($this->getRouteUrl());
         }
         else
