@@ -13,7 +13,7 @@ namespace Sorien\DataGridBundle\Grid\Export;
 
 /**
  *
- * Tab-Separated Calues
+ * Tab-Separated Values
  *
  */
 class TSVExport extends DSVExport

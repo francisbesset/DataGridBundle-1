@@ -15,6 +15,7 @@ namespace Sorien\DataGridBundle\Grid;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Sorien\DataGridBundle\Grid\Action\MassActionInterface;
 use Sorien\DataGridBundle\Grid\Action\RowActionInterface;
@@ -427,33 +428,17 @@ class Grid
         {
             if (array_key_exists($exportId, $this->exports))
             {
-                $export = $this->exports[$exportId];
                 $this->isReadyForExport = true;
 
                 $this->page = 0;
                 $this->limit = 10;
                 $this->prepare();
 
-                $content = $this->container->get('twig')->loadTemplate($export->getTemplate())->renderBlock('grid_export', array('grid' => $this, 'export' => $export->getParameters()));
+                $export = $this->exports[$exportId];
+                $export->setContainer($this->container);
+                $export->computeData($this);
 
-                if (function_exists('mb_strlen')) {
-                    $filesize = mb_strlen($content, $this->container->getParameter('kernel.charset'));
-                } else {
-                    $filesize = strlen($content);
-                }
-
-                $headers = [
-                    'Content-Description' => 'File Transfer',
-                    'Content-Type' => $export->getMimeType(),
-                    'Content-Disposition' => sprintf('attachment; filename="%s"', $export->getBaseName()),
-                    'Content-Transfer-Encoding' => 'binary',
-                    'Expires' => '0',
-                    'Cache-Control' => 'must-revalidate',
-                    'Pragma' => 'public',
-                    'Content-Length' => $filesize
-                ];
-
-                $this->exportResponse = new Response($content, 200, $headers);
+                $this->exportResponse = $export->getResponse();
             }
             else
             {

@@ -13,25 +13,48 @@ namespace Sorien\DataGridBundle\Grid\Export;
 
 /**
  *
- * Delimiter-Separated Calues
+ * Delimiter-Separated Values
  *
  */
+use Sorien\DataGridBundle\Grid\Grid;
+
 class DSVExport extends Export
 {
     protected $fileExtension = null;
 
     protected $mimeType = 'application/octet-stream';
 
-    protected $template = 'SorienDataGridBundle:Exports:export.dsv.twig';
-
     protected $delimiter = null;
 
 
-    public function __construct($tilte, $fileName)
+    public function __construct($tilte, $fileName = 'export', $params = array())
     {
         $this->parameters['delimiter'] = $this->delimiter;
 
-        parent::__construct($tilte, $fileName);
+        parent::__construct($tilte, $fileName, $params);
+    }
+
+    public function computeData($grid)
+    {
+        $data = $this->getFlatData($grid);
+
+        // Array to dsv
+        $outstream = fopen("php://temp", 'r+');
+
+        foreach ($data as $line) {
+            fputcsv($outstream, $line, $this->getDelimiter(), '"');
+        }
+
+        rewind($outstream);
+
+        $content = '';
+        while (($buffer = fgets($outstream)) !== false) {
+            $content .= $buffer;
+        }
+
+        fclose($outstream);
+
+        $this->content = $content;
     }
 
     /**

@@ -13,19 +13,17 @@ namespace Sorien\DataGridBundle\Grid\Export;
 
 /**
  *
- * Comma-Separated Values
+ * JSON
  *
  */
-class CSVExport extends DSVExport
+use Sorien\DataGridBundle\Grid\Grid;
+
+class JSONExport extends Export
 {
-    protected $fileExtension = 'csv';
+    protected $fileExtension = 'json';
 
-    protected $mimeType = 'text/comma-separated-values';
-
-    protected $delimiter = ',';
-
-    public function __construct($tilte, $fileName)
+    public function computeData($grid)
     {
-        parent::__construct($tilte, $fileName);
+        $this->content = json_encode($this->getData($grid));
     }
 }

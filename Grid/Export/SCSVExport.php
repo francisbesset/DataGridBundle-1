@@ -13,7 +13,7 @@ namespace Sorien\DataGridBundle\Grid\Export;
 
 /**
  *
- * Semi-Colon-Separated Calues
+ * Semi-Colon-Separated Values
  *
  */
 class SCSVExport extends DSVExport

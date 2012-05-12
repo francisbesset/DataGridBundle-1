@@ -43,9 +43,9 @@ class Rows implements \IteratorAggregate, \Countable
     {
         if (!$row instanceof Row)
         {
-            throw new \InvalidArgumentException('Your column needs to extend class Column.');
+            throw new \InvalidArgumentException('Your column needs to extend class Row.');
         }
-        
+
         $this->rows->attach($row);
 
         return $this;
