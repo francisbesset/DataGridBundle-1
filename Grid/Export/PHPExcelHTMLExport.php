@@ -13,15 +13,19 @@ namespace Sorien\DataGridBundle\Grid\Export;
 
 /**
  *
- * JSON
+ * PHPExcel HTML Export
  *
  */
-class JSONExport extends Export
+class PHPExcelHTMLExport extends PHPExcel5Export
 {
-    protected $fileExtension = 'json';
+    protected $fileExtension = 'html';
 
-    public function computeData($grid)
+    protected $mimeType = 'text/html';
+
+    protected function getWriter()
     {
-        $this->content = json_encode($this->getData($grid));
+        $writer = new \PHPExcel_Writer_HTML($this->excelObj);
+
+        return $writer;
     }
 }

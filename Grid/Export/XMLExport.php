@@ -20,8 +20,6 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
  * XML
  *
  */
-use Sorien\DataGridBundle\Grid\Grid;
-
 class XMLExport extends Export
 {
     protected $fileExtension = 'xml';

@@ -13,15 +13,16 @@ namespace Sorien\DataGridBundle\Grid\Export;
 
 /**
  *
- * JSON
+ * PHPExcel_Excel 2003 Export (.xlsx)
  *
  */
-class JSONExport extends Export
+class PHPExcel2003Export extends PHPExcel2007Export
 {
-    protected $fileExtension = 'json';
-
-    public function computeData($grid)
+    protected function getWriter()
     {
-        $this->content = json_encode($this->getData($grid));
+        $writer = parent::getWriter();
+        $writer->setOffice2003Compatibility(true);
+
+        return $writer;
     }
 }

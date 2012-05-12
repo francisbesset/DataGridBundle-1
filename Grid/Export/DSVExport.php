@@ -16,8 +16,6 @@ namespace Sorien\DataGridBundle\Grid\Export;
  * Delimiter-Separated Values
  *
  */
-use Sorien\DataGridBundle\Grid\Grid;
-
 class DSVExport extends Export
 {
     protected $fileExtension = null;
