@@ -14,6 +14,7 @@ namespace Sorien\DataGridBundle\Grid\Export;
 /**
  *
  * PHPExcel 5 Export (97-2003) (.xls)
+ * 52 columns maximum
  *
  */
 class PHPExcel5Export extends Export
@@ -35,24 +36,23 @@ class PHPExcel5Export extends Export
     {
         $data = $this->getFlatData($grid);
 
-        // Set properties
-        //$this->excelObj->getProperties()->setCreator("Maarten Balliauw");
-        //$this->excelObj->getProperties()->setLastModifiedBy("Maarten Balliauw");
-        //$this->excelObj->getProperties()->setTitle("Office 2007 XLSX Test Document");
-        //$this->excelObj->getProperties()->setSubject("Office 2007 XLSX Test Document");
-        //$this->excelObj->getProperties()->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.");
-
-        // Add some data
         $this->excelObj->setActiveSheetIndex(0);
-        $this->excelObj->getActiveSheet()->SetCellValue('A1', 'Hello');
-        //$this->excelObj->getActiveSheet()->SetCellValue('B2', 'world!');
-        //$this->excelObj->getActiveSheet()->SetCellValue('C1', 'Hello');
-        //$this->excelObj->getActiveSheet()->SetCellValue('D2', 'world!');
 
-        // Rename sheet
-        //$this->excelObj->getActiveSheet()->setTitle('Simple');
+        $row = 1;
+        foreach ($data as $line) {
+            $column = 'A';
+            foreach ($line as $cell) {
+                $this->excelObj->getActiveSheet()->SetCellValue($column.$row, $cell);
 
-        // Save Excel 5 file
+                if ($column == 'Z') {
+                    $column = 'AA';
+                } else {
+                    $column++;
+                }
+            }
+            $row++;
+        }
+
         $objWriter = $this->getWriter();
 
         ob_start();
