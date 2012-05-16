@@ -72,7 +72,7 @@ abstract class Export implements ContainerAwareInterface
             $filesize = strlen($this->content);
         }
 
-        $headers = [
+        $headers = array(
             'Content-Description' => 'File Transfer',
             'Content-Type' => $this->getMimeType(),
             'Content-Disposition' => sprintf('attachment; filename="%s"', $this->getBaseName()),
@@ -81,7 +81,7 @@ abstract class Export implements ContainerAwareInterface
             'Cache-Control' => 'must-revalidate',
             'Pragma' => 'public',
             'Content-Length' => $filesize
-        ];
+        );
 
         return new Response($this->content, 200, $headers);
     }
